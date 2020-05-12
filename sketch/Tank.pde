@@ -1,6 +1,8 @@
 public class Tank {
   private PVector pos, vel, acc;
   
+  private Turrent gun;
+  
   private int w, h;
   
   private float mass;
@@ -18,6 +20,8 @@ public class Tank {
     deg = 0;
     
     mass = 5;
+    
+    gun = new Turrent(pos.x, pos.y);
   }
   
   public void display() {
@@ -42,15 +46,13 @@ public class Tank {
     rectMode(CENTER);
     rect(0, 0, w, h);
     
-    //Draw center
-    fill(256, 0, 0);
-    circle(0, 0, 5);
-    
     //Draw front
     stroke(256, 0, 0);
     strokeWeight(3);
     
     line(-w/2, -h/2, w/2, -h/2);
+    
+    gun.display();
     
     popMatrix();
   }
@@ -60,10 +62,13 @@ public class Tank {
     
     vel.add(acc);
     pos.add(vel);
+    gun.updatePos(vel);
     
     vel.limit(2);
     
     acc.mult(0);
+    
+    gun.update(deg);
   }
   
   // F = M * A OR A = F / M
