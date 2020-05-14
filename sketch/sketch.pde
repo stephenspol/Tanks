@@ -1,10 +1,17 @@
+import java.util.ArrayList;
+
 Tank tank;
+ArrayList<Wall> walls;
 boolean moveUp, moveDown, moveRight, moveLeft = false;
 
 void setup() {
-  size(700,700);
+  size(1000, 1000);
   
   tank = new Tank(400, 400);
+  
+  walls = new ArrayList<Wall>();
+  
+  walls.add(new Wall(300, 20, 70, 20));
 }
 
 void draw() {
@@ -24,6 +31,10 @@ void draw() {
   
   else if (moveLeft)
     tank.move(3);
+    
+  for (Wall wall : walls) {
+    wall.display();
+  }
 }
 
 void keyPressed() {
@@ -32,6 +43,12 @@ void keyPressed() {
  
 void keyReleased() {
   setMove(keyCode, key, false);
+}
+
+void mousePressed() {
+  if (mouseButton == LEFT) {
+    tank.spawnBullet();
+  }
 }
  
 boolean setMove(int k1, int k2, boolean b) {

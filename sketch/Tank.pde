@@ -62,13 +62,13 @@ public class Tank {
     
     vel.add(acc);
     pos.add(vel);
-    gun.updatePos(vel);
+    gun.update(vel);
     
     vel.limit(2);
     
     acc.mult(0);
     
-    gun.update(deg);
+    gun.updateAngle(deg);
   }
   
   // F = M * A OR A = F / M
@@ -106,7 +106,7 @@ public class Tank {
   }
   
   // Rotate a vector in 2D
-  private PVector rotate2D(PVector v, float theta) {
+  public PVector rotate2D(PVector v, float theta) {
     // What's the magnitude?
     float m = v.mag();
     // What's the angle?
@@ -120,5 +120,9 @@ public class Tank {
     v.y = m * sin(a);
     
    return v;
-}
+  }
+  
+  public boolean spawnBullet() {
+    return gun.spawnBullet(deg);
+  }
 }
