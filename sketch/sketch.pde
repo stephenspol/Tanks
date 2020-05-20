@@ -4,6 +4,9 @@ Tank tank;
 ArrayList<Wall> walls;
 boolean moveUp, moveDown, moveRight, moveLeft = false;
 
+// Show HitBoxes
+public boolean showHB;
+
 void setup() {
   size(1000, 1000);
   
@@ -12,6 +15,8 @@ void setup() {
   walls = new ArrayList<Wall>();
   
   walls.add(new Wall(300, 20, 70, 20));
+  
+  showHB = false;
 }
 
 void draw() {
@@ -34,11 +39,16 @@ void draw() {
     
   for (Wall wall : walls) {
     wall.display();
+    wall.checkCollision(tank);
   }
 }
 
 void keyPressed() {
   setMove(keyCode, key, true);
+  
+  if (key == 'h') {
+    showHB = !showHB;
+  }
 }
  
 void keyReleased() {

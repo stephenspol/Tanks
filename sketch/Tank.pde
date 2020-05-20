@@ -1,5 +1,5 @@
-public class Tank {
-  private PVector pos, vel, acc;
+public class Tank extends Entity{
+  private PVector vel, acc;
   
   private Turrent gun;
   
@@ -10,7 +10,7 @@ public class Tank {
   private float deg;
   
   public Tank(float x, float y) {
-    pos = new PVector(x, y);
+    super(x, y);
     vel = new PVector(0, 0);
     acc = new PVector(0, 0);
     
@@ -22,6 +22,11 @@ public class Tank {
     mass = 5;
     
     gun = new Turrent(pos.x, pos.y);
+    
+    // rectMode(Center) makes it so the x and y are in the center instead of top left quandrant
+    for (float i = pos.x - w/2; i <= w/2 + pos.x; i += w)
+      for (float j = pos.y - h/2; j <= h/2 + pos.y; j += h)
+        points.add(new PVector(i, j));
   }
   
   public void display() {
@@ -32,6 +37,8 @@ public class Tank {
     rotate(radians(deg));
     
     //Draw wheels
+    pushMatrix();
+    
     stroke(20);
     strokeWeight(10);
     
@@ -39,14 +46,22 @@ public class Tank {
     
     line(w/2, -h/2, w/2, h/2);
     
+    popMatrix();
+    
     //Draw body
+    pushMatrix();
+    
     fill(0, 150, 0);
     noStroke();
     
     rectMode(CENTER);
     rect(0, 0, w, h);
     
+    popMatrix();
+    
     //Draw front
+    pushMatrix();
+    
     stroke(256, 0, 0);
     strokeWeight(3);
     
@@ -55,6 +70,11 @@ public class Tank {
     gun.display();
     
     popMatrix();
+    
+    popMatrix();
+    
+    displayHitBoxes();
+    gun.displayHitBoxes();
   }
   
   public void update() {
@@ -62,6 +82,10 @@ public class Tank {
     
     vel.add(acc);
     pos.add(vel);
+    for (PVector point : points) {
+      point.add(vel);
+    }
+    
     gun.update(vel);
     
     vel.limit(2);
@@ -90,6 +114,10 @@ public class Tank {
     // Move Right
     if (dir == 1) {
       deg += 2;
+      
+      for (PVector point : points) {
+        point = rotate2D(point, pos.x, pos.y, 2);
+      }
     }
     
     // Move Down
@@ -102,6 +130,10 @@ public class Tank {
     // Move Left
     if (dir == 3) {
       deg -= 2;
+      
+      for (PVector point : points) {
+        point = rotate2D(point, pos.x, pos.y, -2);
+      }
     }
   }
   
@@ -124,5 +156,13 @@ public class Tank {
   
   public boolean spawnBullet() {
     return gun.spawnBullet(deg);
+  }
+  
+  public void onCollision() {
+  
+  }
+  
+  public boolean checkCollision(Entity e) {
+    return false;
   }
 }
